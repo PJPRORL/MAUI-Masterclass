@@ -1,0 +1,82 @@
+@page "/catalog"
+@inject HttpClient Http
+@using Markdig
+
+<div class="catalog-container">
+    <div class="catalog-content">
+        @if (content == null)
+        {
+            <p><em>Loading catalog...</em></p>
+        }
+        else
+        {
+            @((MarkupString)content)
+        }
+    </div>
+</div>
+
+<style>
+    .catalog-container {
+        padding: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+        background: #1e1e1e;
+        color: #d4d4d4;
+        min-height: 100vh;
+    }
+    .catalog-content {
+        line-height: 1.6;
+    }
+    .catalog-content h1, .catalog-content h2, .catalog-content h3 {
+        color: #569cd6;
+        margin-top: 1.5em;
+        border-bottom: 1px solid #3e3e42;
+        padding-bottom: 0.5em;
+    }
+    .catalog-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1em 0;
+        background: #252526;
+    }
+    .catalog-content th, .catalog-content td {
+        border: 1px solid #3e3e42;
+        padding: 10px;
+        text-align: left;
+    }
+    .catalog-content th {
+        background: #333333;
+        color: #ffffff;
+    }
+    .catalog-content code {
+        background: #3c3c3c;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: 'Consolas', 'Monaco', monospace;
+        color: #ce9178;
+    }
+    .catalog-content pre {
+        background: #1e1e1e;
+        padding: 15px;
+        border: 1px solid #3e3e42;
+        overflow-x: auto;
+    }
+</style>
+
+@code {
+    private string content;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var markdown = await Http.GetStringAsync("content/catalog.md");
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            content = Markdown.ToHtml(markdown, pipeline);
+        }
+        catch (Exception ex)
+        {
+            content = $"<p>Error loading catalog: {ex.Message}</p>";
+        }
+    }
+}

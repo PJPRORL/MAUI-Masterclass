@@ -1,0 +1,309 @@
+@page "/playground"
+@using MauiLearningPlatform.Services
+@using MauiLearningPlatform.Shared
+@inject ProjectState ProjectState
+@inject SimulationEngine SimulationEngine
+@inject IJSRuntime JSRuntime
+
+<div class="playground-container">
+    <!-- 1. File Explorer -->
+    <div class="explorer-pane">
+        <FileExplorer />
+    </div>
+
+    <!-- 2. Code Editor -->
+    <div class="editor-pane">
+        <div class="editor-header">
+            <span>@(ProjectState.ActiveFile?.Name ?? "No File Selected")</span>
+            <button class="run-btn" @onclick="RunCode" disabled="@IsRunning">
+                @(IsRunning ? "⏳ Running..." : "▶ Run Project")
+            </button>
+        </div>
+        <div class="editor-wrapper">
+            @if (ProjectState.ActiveFile != null)
+            {
+                <CodeEditor @key="ProjectState.ActiveFile.Path" 
+                           Id="main-editor" 
+                           Language="@ProjectState.ActiveFile.Type" 
+                           InitialCode="@ProjectState.ActiveFile.Content" 
+                           @ref="mainEditor" />
+            }
+            else
+            {
+                <div class="empty-state">Select a file to edit</div>
+            }
+        </div>
+    </div>
+
+    <!-- 3. Preview -->
+    <div class="preview-pane">
+        <div class="preview-header">Preview</div>
+        <div class="preview-content">
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <div class="error-message">@ErrorMessage</div>
+            }
+            
+            @if (RenderedUI != null)
+            {
+                @RenderedUI
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .playground-container { display: flex; height: calc(100vh - 60px); }
+    .explorer-pane { width: 20%; border-right: 1px solid #3e3e42; background: #252526; }
+    .editor-pane { width: 40%; display: flex; flex-direction: column; border-right: 1px solid #3e3e42; background: #1e1e1e; }
+    .preview-pane { width: 40%; display: flex; flex-direction: column; background: white; color: black; }
+    
+    .editor-wrapper { flex: 1; position: relative; }
+    .editor-header { display: flex; justify-content: space-between; align-items: center; color: #ccc; padding: 5px 10px; background: #2d2d30; font-weight: bold; }
+    .run-btn { background: #4CAF50; color: white; border: none; padding: 5px 15px; cursor: pointer; border-radius: 3px; }
+    .run-btn:disabled { background: #555; cursor: not-allowed; }
+    
+    .empty-state { color: #666; display: flex; align-items: center; justify-content: center; height: 100%; }
+    .preview-header { background: #f0f0f0; padding: 10px; border-bottom: 1px solid #ccc; font-weight: bold; }
+    .preview-content { padding: 20px; flex: 1; overflow: auto; }
+    .error-message { color: red; background: #ffe6e6; padding: 10px; border: 1px solid red; margin-bottom: 10px; white-space: pre-wrap; }
+
+    /* Simulated MAUI Controls */
+    .maui-stack-vertical { display: flex; flex-direction: column; }
+    .maui-stack-horizontal { display: flex; flex-direction: row; }
+    .maui-label { margin: 5px; }
+    .maui-entry { margin: 5px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    .maui-button { margin: 5px; padding: 10px 20px; background-color: #512bd4; color: white; border: none; border-radius: 5px; cursor: pointer; }
+</style>
+
+@code {
+    private CodeEditor mainEditor;
+    private string ErrorMessage;
+    private RenderFragment RenderedUI;
+    private bool IsRunning = false;
+
+    protected override void OnInitialized()
+    {
+        ProjectState.OnChange += StateHasChanged;
+    }
+
+    private async Task RunCode()
+    {
+        if (IsRunning) return;
+        IsRunning = true;
+        StateHasChanged();
+        await Task.Delay(50); // UI Refresh
+
+        ErrorMessage = "";
+        RenderedUI = null;
+
+        try
+        {
+            // 1. Save current file content
+            if (ProjectState.ActiveFile != null && mainEditor != null)
+            {
+                var currentCode = await mainEditor.GetValue();
+                ProjectState.UpdateFileContent(ProjectState.ActiveFile.Path, currentCode);
+            }
+
+            // 2. Compile Project
+            SimulationEngine.Compile(ProjectState.Files);
+
+            // 3. Find Main Page (Hardcoded to Views/MainPage.xaml for now)
+            var mainPageFile = ProjectState.Files.FirstOrDefault(f => f.Name == "MainPage.xaml");
+            if (mainPageFile == null) throw new Exception("Could not find Views/MainPage.xaml");
+
+            // 4. Create ViewModel (Hardcoded to MainViewModel for now)
+            // In a real app, we'd parse the XAML to find the BindingContext type
+            var viewModel = SimulationEngine.GetViewModel("MainViewModel");
+            if (viewModel == null) throw new Exception("Could not create MainViewModel. Check your C# code.");
+
+            // 5. Render
+            RenderedUI = ParseXaml(mainPageFile.Content, viewModel);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message + "\n" + ex.StackTrace;
+        }
+        finally
+        {
+            IsRunning = false;
+            StateHasChanged();
+        }
+    }
+
+    private RenderFragment ParseXaml(string xaml, object viewModel)
+    {
+        try
+        {
+            var doc = System.Xml.Linq.XDocument.Parse(xaml);
+            return builder =>
+            {
+                int seq = 0;
+                RenderNode(builder, doc.Root, (SimulatedObject)viewModel, ref seq);
+            };
+        }
+        catch (Exception ex)
+        {
+            return builder => builder.AddMarkupContent(0, $"<div style='color:red'>XAML Parsing Error: {ex.Message}</div>");
+        }
+    }
+
+    private void RenderNode(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder, System.Xml.Linq.XElement node, SimulatedObject viewModel, ref int seq)
+    {
+        var tagName = node.Name.LocalName;
+
+        // Skip non-visual elements (like ContentPage.BindingContext)
+        if (tagName.Contains("."))
+        {
+            foreach (var child in node.Elements()) RenderNode(builder, child, viewModel, ref seq);
+            return;
+        }
+
+        switch (tagName)
+        {
+            case "ContentPage":
+            case "VerticalStackLayout":
+                builder.OpenElement(seq++, "div");
+                builder.AddAttribute(seq++, "class", tagName == "ContentPage" ? "maui-page" : "maui-stack-vertical");
+                ApplyCommonAttributes(builder, node, ref seq);
+                foreach (var child in node.Elements()) RenderNode(builder, child, viewModel, ref seq);
+                builder.CloseElement();
+                break;
+
+            case "HorizontalStackLayout":
+                builder.OpenElement(seq++, "div");
+                builder.AddAttribute(seq++, "class", "maui-stack-horizontal");
+                ApplyCommonAttributes(builder, node, ref seq);
+                foreach (var child in node.Elements()) RenderNode(builder, child, viewModel, ref seq);
+                builder.CloseElement();
+                break;
+
+            case "Label":
+                builder.OpenElement(seq++, "div");
+                builder.AddAttribute(seq++, "class", "maui-label");
+                ApplyCommonAttributes(builder, node, ref seq);
+                
+                var textAttr = node.Attribute("Text");
+                if (textAttr != null)
+                {
+                    var value = ResolveBinding(textAttr.Value, viewModel);
+                    builder.AddContent(seq++, value);
+                }
+                builder.CloseElement();
+                break;
+
+            case "Button":
+                builder.OpenElement(seq++, "button");
+                builder.AddAttribute(seq++, "class", "maui-button");
+                ApplyCommonAttributes(builder, node, ref seq);
+                
+                var cmdAttr = node.Attribute("Command");
+                if (cmdAttr != null && IsBinding(cmdAttr.Value))
+                {
+                    var cmdName = GetBindingPath(cmdAttr.Value);
+                    builder.AddAttribute(seq++, "onclick", EventCallback.Factory.Create(this, () => 
+                    {
+                        viewModel.ExecuteCommand(cmdName);
+                        StateHasChanged();
+                    }));
+                }
+
+                var btnTextAttr = node.Attribute("Text");
+                if (btnTextAttr != null) builder.AddContent(seq++, ResolveBinding(btnTextAttr.Value, viewModel));
+                
+                builder.CloseElement();
+                break;
+
+            case "Entry":
+                builder.OpenElement(seq++, "input");
+                builder.AddAttribute(seq++, "class", "maui-entry");
+                ApplyCommonAttributes(builder, node, ref seq);
+                
+                var placeholder = node.Attribute("Placeholder");
+                if (placeholder != null) builder.AddAttribute(seq++, "placeholder", placeholder.Value);
+
+                var textEntryAttr = node.Attribute("Text");
+                if (textEntryAttr != null && IsBinding(textEntryAttr.Value))
+                {
+                    var propName = GetBindingPath(textEntryAttr.Value);
+                    var val = viewModel.Get(propName)?.ToString();
+                    builder.AddAttribute(seq++, "value", val);
+                    builder.AddAttribute(seq++, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, (e) => 
+                    {
+                        viewModel.Set(propName, e.Value.ToString());
+                        StateHasChanged();
+                    }));
+                }
+                builder.CloseElement();
+                break;
+                
+            case "CollectionView":
+                // Very basic CollectionView simulation
+                var itemsSourceAttr = node.Attribute("ItemsSource");
+                if (itemsSourceAttr != null && IsBinding(itemsSourceAttr.Value))
+                {
+                    var propName = GetBindingPath(itemsSourceAttr.Value);
+                    var items = viewModel.Get(propName) as System.Collections.IEnumerable;
+                    
+                    builder.OpenElement(seq++, "div");
+                    builder.AddAttribute(seq++, "class", "maui-collection-view");
+                    
+                    if (items != null)
+                    {
+                        foreach (var item in items)
+                        {
+                            builder.OpenElement(seq++, "div");
+                            builder.AddAttribute(seq++, "class", "maui-collection-item");
+                            builder.AddContent(seq++, item.ToString()); // Simplified: just ToString()
+                            builder.CloseElement();
+                        }
+                    }
+                    builder.CloseElement();
+                }
+                break;
+        }
+    }
+
+    private void ApplyCommonAttributes(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder, System.Xml.Linq.XElement node, ref int seq)
+    {
+        var style = new System.Text.StringBuilder();
+
+        var padding = node.Attribute("Padding")?.Value;
+        if (padding != null) style.Append($"padding: {padding}px;");
+        
+        var spacing = node.Attribute("Spacing")?.Value;
+        if (spacing != null) style.Append($"gap: {spacing}px;");
+
+        var fontSize = node.Attribute("FontSize")?.Value;
+        if (fontSize != null) style.Append($"font-size: {fontSize}px;");
+
+        var textColor = node.Attribute("TextColor")?.Value;
+        if (textColor != null) style.Append($"color: {textColor};");
+        
+        if (style.Length > 0)
+        {
+            builder.AddAttribute(seq++, "style", style.ToString());
+        }
+    }
+
+    private bool IsBinding(string value) => value.StartsWith("{Binding") && value.EndsWith("}");
+    
+    private string GetBindingPath(string binding)
+    {
+        var parts = binding.Split(' ');
+        if (parts.Length > 1)
+        {
+            return parts[1].Trim('}');
+        }
+        return "";
+    }
+
+    private string ResolveBinding(string value, SimulatedObject viewModel)
+    {
+        if (!IsBinding(value)) return value;
+        
+        var propName = GetBindingPath(value);
+        return viewModel.Get(propName)?.ToString() ?? "";
+    }
+}

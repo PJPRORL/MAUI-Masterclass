@@ -1,0 +1,71 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = browser
+build_property.RootNamespace = MauiLearningPlatform
+build_property.RootNamespace = MauiLearningPlatform
+build_property.ProjectDir = C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Pages/Catalog.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0YWxvZy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Pages/ChapterView.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2hhcHRlclZpZXcucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Pages/NotFound.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTm90Rm91bmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Pages/Playground.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGxheWdyb3VuZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Shared/CodeEditor.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvZGVFZGl0b3IucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Shared/FileExplorer.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZpbGVFeHBsb3Jlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/piuss/.gemini/antigravity/scratch/maui-learning-platform/MauiLearningPlatform/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 

@@ -1,0 +1,36 @@
+@page "/chapter/{Id:int}"
+@inject HttpClient Http
+@using Markdig
+
+<div class="markdown-content">
+    @if (content == null)
+    {
+        <p><em>Loading content...</em></p>
+    }
+    else
+    {
+        @((MarkupString)htmlContent)
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private string content;
+    private string htmlContent;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            content = await Http.GetStringAsync($"content/chapter{Id}.md");
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            htmlContent = Markdown.ToHtml(content, pipeline);
+        }
+        catch (Exception ex)
+        {
+            htmlContent = $"<h3>Error loading chapter {Id}</h3><p>{ex.Message}</p>";
+        }
+    }
+}

@@ -1,0 +1,22 @@
+@inject IJSRuntime JSRuntime
+
+<div id="@Id" style="height: 100%; width: 100%;"></div>
+
+@code {
+    [Parameter] public string Id { get; set; } = "editor";
+    [Parameter] public string InitialCode { get; set; } = "";
+    [Parameter] public string Language { get; set; } = "csharp";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("monacoInterop.initialize", Id, InitialCode, Language);
+        }
+    }
+
+    public async Task<string> GetValue()
+    {
+        return await JSRuntime.InvokeAsync<string>("monacoInterop.getValue", Id);
+    }
+}
