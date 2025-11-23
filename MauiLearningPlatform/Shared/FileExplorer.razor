@@ -1,10 +1,15 @@
 @using MauiLearningPlatform.Services
 @inject ProjectState ProjectState
+@inject IJSRuntime JSRuntime
 
 <div class="file-explorer">
     <div class="explorer-header">
         <span>📁 Project</span>
-        <button class="add-btn" @onclick="ShowAddModal" title="Add New File">+</button>
+        <div class="header-actions">
+            <button class="action-btn" @onclick="ExportProject" title="Export Project">⬇️</button>
+            <button class="action-btn" @onclick="TriggerImport" title="Import Project">⬆️</button>
+            <button class="add-btn" @onclick="ShowAddModal" title="Add New File">+</button>
+        </div>
     </div>
     <div class="explorer-content">
         @foreach (var group in ProjectState.Files.GroupBy(f => f.Folder).OrderBy(g => g.Key))
@@ -24,6 +29,8 @@
         }
     </div>
 </div>
+
+<InputFile id="importInput" OnChange="HandleFileSelected" hidden />
 
 @if (ShowAddDialog)
 {
@@ -85,7 +92,11 @@
         justify-content: space-between;
         align-items: center;
     }
-    .add-btn {
+    .header-actions {
+        display: flex;
+        gap: 5px;
+    }
+    .add-btn, .action-btn {
         background: #3e3e42;
         color: white;
         border: none;
@@ -97,7 +108,7 @@
         align-items: center;
         justify-content: center;
     }
-    .add-btn:hover { background: #505050; }
+    .add-btn:hover, .action-btn:hover { background: #505050; }
     
     .explorer-content {
         flex: 1;
@@ -196,6 +207,30 @@
     private void SelectFile(VirtualFile file)
     {
         ProjectState.SetActiveFile(file);
+    }
+
+    private async Task ExportProject()
+    {
+        var json = ProjectState.ExportProject();
+        var fileName = $"maui-project-{DateTime.Now:yyyyMMdd-HHmm}.json";
+        await JSRuntime.InvokeVoidAsync("downloadFile", fileName, json);
+    }
+
+    private async Task TriggerImport()
+    {
+        await JSRuntime.InvokeVoidAsync("triggerClick", "importInput");
+    }
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            using var stream = file.OpenReadStream();
+            using var reader = new StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
+            ProjectState.ImportProject(json);
+        }
     }
 
     private void ShowAddModal()

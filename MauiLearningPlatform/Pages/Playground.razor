@@ -82,9 +82,10 @@
     private RenderFragment RenderedUI;
     private bool IsRunning = false;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         ProjectState.OnChange += StateHasChanged;
+        await ProjectState.LoadProjectAsync();
     }
 
     private async Task RunCode()
@@ -109,17 +110,68 @@
             // 2. Compile Project
             SimulationEngine.Compile(ProjectState.Files);
 
-            // 3. Find Main Page (Hardcoded to Views/MainPage.xaml for now)
-            var mainPageFile = ProjectState.Files.FirstOrDefault(f => f.Name == "MainPage.xaml");
-            if (mainPageFile == null) throw new Exception("Could not find Views/MainPage.xaml");
+            // 3. Determine Page to Run
+            VirtualFile pageFile = null;
 
-            // 4. Create ViewModel (Hardcoded to MainViewModel for now)
-            // In a real app, we'd parse the XAML to find the BindingContext type
-            var viewModel = SimulationEngine.GetViewModel("MainViewModel");
-            if (viewModel == null) throw new Exception("Could not create MainViewModel. Check your C# code.");
+            // Strategy: 
+            // A. If Active File is XAML, run that.
+            // B. If Active File is C#, try to find matching XAML (e.g. MainViewModel -> MainPage.xaml)
+            // C. Fallback to MainPage.xaml
+
+            if (ProjectState.ActiveFile != null && ProjectState.ActiveFile.Type == "xml") // XAML
+            {
+                pageFile = ProjectState.ActiveFile;
+            }
+            else if (ProjectState.ActiveFile != null && ProjectState.ActiveFile.Type == "csharp")
+            {
+                // Try to guess View from ViewModel (MainViewModel -> MainPage.xaml)
+                var name = ProjectState.ActiveFile.Name.Replace(".cs", "");
+                if (name.EndsWith("ViewModel"))
+                {
+                    var viewName = name.Replace("ViewModel", "Page") + ".xaml";
+                    pageFile = ProjectState.Files.FirstOrDefault(f => f.Name == viewName);
+                }
+            }
+
+            // Fallback
+            if (pageFile == null)
+            {
+                pageFile = ProjectState.Files.FirstOrDefault(f => f.Name == "MainPage.xaml");
+            }
+
+            if (pageFile == null) throw new Exception("No View found to run. Please create a .xaml page.");
+
+            // 4. Determine ViewModel
+            // Parse x:Class to get class name, then guess ViewModel
+            var xaml = pageFile.Content;
+            var doc = System.Xml.Linq.XDocument.Parse(xaml);
+            var xNamespace = System.Xml.Linq.XNamespace.Get("http://schemas.microsoft.com/winfx/2009/xaml");
+            var xClass = doc.Root.Attribute(xNamespace + "Class")?.Value; 
+            
+            object viewModel = null;
+
+            if (!string.IsNullOrEmpty(xClass))
+            {
+                // MauiLearningPlatform.MainPage -> MainViewModel
+                var className = xClass.Split('.').Last();
+                var vmName = className.Replace("Page", "") + "ViewModel";
+                viewModel = SimulationEngine.GetViewModel(vmName);
+            }
+
+            // Fallback ViewModel
+            if (viewModel == null)
+            {
+                viewModel = SimulationEngine.GetViewModel("MainViewModel");
+            }
+
+            if (viewModel == null)
+            {
+                 // Create a dummy object if no VM found, so we can still render static XAML
+                 viewModel = new SimulatedObject("EmptyViewModel");
+            }
 
             // 5. Render
-            RenderedUI = ParseXaml(mainPageFile.Content, viewModel);
+            RenderedUI = ParseXaml(pageFile.Content, viewModel);
         }
         catch (Exception ex)
         {
