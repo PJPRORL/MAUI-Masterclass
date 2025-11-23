@@ -15,9 +15,14 @@
     <div class="editor-pane">
         <div class="editor-header">
             <span>@(ProjectState.ActiveFile?.Name ?? "No File Selected")</span>
-            <button class="run-btn" @onclick="RunCode" disabled="@IsRunning">
-                @(IsRunning ? "⏳ Running..." : "▶ Run Project")
-            </button>
+            <div class="editor-actions">
+                <button class="save-btn" @onclick="SaveFile" disabled="@(ProjectState.ActiveFile == null)">
+                    💾 Save
+                </button>
+                <button class="run-btn" @onclick="RunCode" disabled="@IsRunning">
+                    @(IsRunning ? "⏳ Running..." : "▶ Run Project")
+                </button>
+            </div>
         </div>
         <div class="editor-wrapper">
             @if (ProjectState.ActiveFile != null)
@@ -37,7 +42,13 @@
 
     <!-- 3. Preview -->
     <div class="preview-pane">
-        <div class="preview-header">Preview</div>
+        <div class="preview-header">
+            <span>Preview</span>
+            @if (IsSaved)
+            {
+                <span class="save-indicator">✅ Saved!</span>
+            }
+        </div>
         <div class="preview-content">
             @if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -60,11 +71,24 @@
     
     .editor-wrapper { flex: 1; position: relative; }
     .editor-header { display: flex; justify-content: space-between; align-items: center; color: #ccc; padding: 5px 10px; background: #2d2d30; font-weight: bold; }
+    .editor-actions { display: flex; gap: 10px; }
+    
     .run-btn { background: #4CAF50; color: white; border: none; padding: 5px 15px; cursor: pointer; border-radius: 3px; }
     .run-btn:disabled { background: #555; cursor: not-allowed; }
     
+    .save-btn { background: #007acc; color: white; border: none; padding: 5px 15px; cursor: pointer; border-radius: 3px; }
+    .save-btn:disabled { background: #555; cursor: not-allowed; }
+
     .empty-state { color: #666; display: flex; align-items: center; justify-content: center; height: 100%; }
-    .preview-header { background: #f0f0f0; padding: 10px; border-bottom: 1px solid #ccc; font-weight: bold; }
+    .preview-header { background: #f0f0f0; padding: 10px; border-bottom: 1px solid #ccc; font-weight: bold; display: flex; justify-content: space-between; }
+    .save-indicator { color: green; font-size: 0.9em; animation: fadeOut 2s forwards; }
+    
+    @@keyframes fadeOut {
+        0% { opacity: 1; }
+        70% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+
     .preview-content { padding: 20px; flex: 1; overflow: auto; }
     .error-message { color: red; background: #ffe6e6; padding: 10px; border: 1px solid red; margin-bottom: 10px; white-space: pre-wrap; }
 
@@ -81,11 +105,26 @@
     private string ErrorMessage;
     private RenderFragment RenderedUI;
     private bool IsRunning = false;
+    private bool IsSaved = false;
 
     protected override async Task OnInitializedAsync()
     {
         ProjectState.OnChange += StateHasChanged;
         await ProjectState.LoadProjectAsync();
+    }
+
+    private async Task SaveFile()
+    {
+        if (ProjectState.ActiveFile != null && mainEditor != null)
+        {
+            var currentCode = await mainEditor.GetValue();
+            ProjectState.UpdateFileContent(ProjectState.ActiveFile.Path, currentCode);
+            IsSaved = true;
+            StateHasChanged();
+            await Task.Delay(2000);
+            IsSaved = false;
+            StateHasChanged();
+        }
     }
 
     private async Task RunCode()
@@ -101,11 +140,7 @@
         try
         {
             // 1. Save current file content
-            if (ProjectState.ActiveFile != null && mainEditor != null)
-            {
-                var currentCode = await mainEditor.GetValue();
-                ProjectState.UpdateFileContent(ProjectState.ActiveFile.Path, currentCode);
-            }
+            await SaveFile();
 
             // 2. Compile Project
             SimulationEngine.Compile(ProjectState.Files);
