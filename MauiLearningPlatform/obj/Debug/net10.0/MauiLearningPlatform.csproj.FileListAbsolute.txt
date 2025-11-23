@@ -1,9 +1,0 @@
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\EmbeddedAttribute.cs
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\ValidatableTypeAttribute.cs
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\MauiLearningPlatform.csproj.AssemblyReference.cache
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\rpswa.dswa.cache.json
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\MauiLearningPlatform.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\MauiLearningPlatform.AssemblyInfoInputs.cache
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\MauiLearningPlatform.AssemblyInfo.cs
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\MauiLearningPlatform.csproj.CoreCompileInputs.cache
-C:\Users\piuss\.gemini\antigravity\scratch\maui-learning-platform\MauiLearningPlatform\obj\Debug\net10.0\MauiLearningPlatform.MvcApplicationPartsAssemblyInfo.cache

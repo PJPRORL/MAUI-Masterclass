@@ -1,31 +1,38 @@
 name: Deploy to GitHub Pages
+
 on:
   push:
     branches: [ main ]
+
 jobs:
   deploy-to-github-pages:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
+
     - name: Publish .NET App
       run: dotnet publish MauiLearningPlatform/MauiLearningPlatform.csproj -c Release -o release --nologo
+
     # 🔧 FIX 1: Change Base Path
     # Replaces <base href="/" /> with <base href="/YOUR-REPO-NAME/" />
-    # IMPORTANT: Change 'maui-learning-platform' below to your actual repository name!
     - name: Change Base Tag
-      run: sed -i 's/<base href="\/" \/>/<base href="\/maui-learning-platform\/" \/>/g' release/wwwroot/index.html
+      run: sed -i 's/<base href="\/" \/>/<base href="\/MAUI-Masterclass\/" \/>/g' release/wwwroot/index.html
+
     # 🔧 FIX 2: Handle 404 Routing
     # Copies index.html to 404.html so GitHub serves the app even on 404s
     - name: Copy index.html to 404.html
       run: cp release/wwwroot/index.html release/wwwroot/404.html
+
     # 🔧 FIX 3: Add .nojekyll
     # Prevents GitHub from ignoring files starting with '_' (like _framework)
     - name: Add .nojekyll file
       run: touch release/wwwroot/.nojekyll
+
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
