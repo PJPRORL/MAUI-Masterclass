@@ -1,0 +1,83 @@
+@page "/cursus-maui"
+@using MauiLearningPlatform.Components.Course
+
+<div class="page">
+    <div class="sidebar" style="width: 250px; border-right: 1px solid var(--border-color); background-color: var(--sidebar-bg);">
+        <div class="sidebar-header">
+            <h3>Cursus Inhoud</h3>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 1 ? "active" : "")" @onclick="() => SelectChapter(1)" style="cursor: pointer;">
+                    <span class="icon">📄</span> 01. Introductie
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 2 ? "active" : "")" @onclick="() => SelectChapter(2)" style="cursor: pointer;">
+                    <span class="icon">🔄</span> 02. MVVM & Databinding
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 4 ? "active" : "")" @onclick="() => SelectChapter(4)" style="cursor: pointer;">
+                    <span class="icon">📋</span> 04. CollectionViews
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 5 ? "active" : "")" @onclick="() => SelectChapter(5)" style="cursor: pointer;">
+                    <span class="icon">💾</span> 05. Repositories
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 6 ? "active" : "")" @onclick="() => SelectChapter(6)" style="cursor: pointer;">
+                    <span class="icon">🧭</span> 06. Navigatie
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 8 ? "active" : "")" @onclick="() => SelectChapter(8)" style="cursor: pointer;">
+                    <span class="icon">🔍</span> 08. Dapper Select
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 9 ? "active" : "")" @onclick="() => SelectChapter(9)" style="cursor: pointer;">
+                    <span class="icon">🔗</span> 09. Dapper Joins 1
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 10 ? "active" : "")" @onclick="() => SelectChapter(10)" style="cursor: pointer;">
+                    <span class="icon">⛓️</span> 10. Dapper Joins 2
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentChapter == 11 ? "active" : "")" @onclick="() => SelectChapter(11)" style="cursor: pointer;">
+                    <span class="icon">✏️</span> 11. Dapper CUD
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="markdown-content">
+            @switch (CurrentChapter)
+            {
+                case 1: <Chapter01 /> break;
+                case 2: <Chapter02 /> break;
+                case 4: <Chapter04 /> break;
+                case 5: <Chapter05 /> break;
+                case 6: <Chapter06 /> break;
+                case 8: <Chapter08 /> break;
+                case 9: <Chapter09 /> break;
+                case 10: <Chapter10 /> break;
+                case 11: <Chapter11 /> break;
+                default: <p>Selecteer een hoofdstuk.</p> break;
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private int CurrentChapter = 1;
+
+    private void SelectChapter(int chapter)
+    {
+        CurrentChapter = chapter;
+    }
+}
