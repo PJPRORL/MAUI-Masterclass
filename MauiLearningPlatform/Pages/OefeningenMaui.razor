@@ -1,0 +1,95 @@
+@page "/oefeningen-maui"
+@using MauiLearningPlatform.Components.Exercises
+
+<div class="page">
+    <div class="sidebar" style="width: 300px; border-right: 1px solid var(--border-color); background-color: var(--sidebar-bg);">
+        <div class="sidebar-header">
+            <h3>Oefeningen</h3>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 1 ? "active" : "")" @onclick="() => SelectExercise(1)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 01. Introduction
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 2 ? "active" : "")" @onclick="() => SelectExercise(2)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 02. MVVM & Databinding
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 3 ? "active" : "")" @onclick="() => SelectExercise(3)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 03. Extra oefeningen
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 4 ? "active" : "")" @onclick="() => SelectExercise(4)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 04. CollectionViews
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 5 ? "active" : "")" @onclick="() => SelectExercise(5)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 05. Interfaces & Repositories
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 6 ? "active" : "")" @onclick="() => SelectExercise(6)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 06. Navigation
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 7 ? "active" : "")" @onclick="() => SelectExercise(7)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 07. Herhaling De Mol
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 8 ? "active" : "")" @onclick="() => SelectExercise(8)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 08. Dapper Select
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 9 ? "active" : "")" @onclick="() => SelectExercise(9)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 09. Dapper Joins 1
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 10 ? "active" : "")" @onclick="() => SelectExercise(10)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 10. Dapper Joins 2
+                </div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-link @(CurrentExercise == 11 ? "active" : "")" @onclick="() => SelectExercise(11)" style="cursor: pointer;">
+                    <span class="icon">📝</span> 11. Dapper CUD
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="markdown-content">
+            @switch (CurrentExercise)
+            {
+                case 1: <Exercise01 /> break;
+                case 2: <Exercise02 /> break;
+                case 3: <Exercise03 /> break;
+                case 4: <Exercise04 /> break;
+                case 5: <Exercise05 /> break;
+                case 6: <Exercise06 /> break;
+                case 7: <Exercise07 /> break;
+                case 8: <Exercise08 /> break;
+                case 9: <Exercise09 /> break;
+                case 10: <Exercise10 /> break;
+                case 11: <Exercise11 /> break;
+                default: <p>Selecteer een oefening.</p> break;
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private int CurrentExercise = 1;
+
+    private void SelectExercise(int exercise)
+    {
+        CurrentExercise = exercise;
+    }
+}

@@ -1,0 +1,38 @@
+@namespace MauiLearningPlatform.Components.Exercises
+
+
+    <h1>Dapper inner joins deel 1</h1>
+
+    <h2>Functionaliteit</h2>
+
+    <h3>Werknemers ophalen</h3>
+    <p>Bij het drukken op de knop "Werknemers ophalen" wordt een lijst van alle werknemers getoond. Per werknemer wordt de voornaam, achternaam, uitgever en jobbeschrijving getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Employee</code> correct hebt geïmplementeerd.</p>
+    <pre><code>ToString</code></pre>
+    <pre><code>Employee</code></pre>
+    <p>Indien er in het veldje Uitgever een waarde is ingevuld, worden enkel de werknemers van die uitgever getoond.</p>
+
+    <h3>Uitgevers ophalen</h3>
+    <p>Bij het drukken op de knop "Uitgevers ophalen" wordt een lijst van alle uitgevers getoond. Per uitgever wordt de naam getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Publisher</code> correct hebt geïmplementeerd.</p>
+    <pre><code>ToString</code></pre>
+    <pre><code>Publisher</code></pre>
+    <p>Indien er in het veldje Uitgever een waarde is ingevuld, worden enkel de uitgevers getoond die voldoen aan de zoekopdracht.</p>
+
+    <h3>Boeken ophalen</h3>
+    <p>Bij het drukken op de knop "Boeken ophalen" wordt een lijst van alle boeken getoond. Per boek wordt de titel, uitgever en datum van uitgave getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Book</code> correct hebt geïmplementeerd.</p>
+    <pre><code>ToString</code></pre>
+    <pre><code>Book</code></pre>
+    <p>Indien er in het veldje "Boek" een waarde is ingevuld, worden enkel de boeken getoond die voldoen aan de zoekopdracht.</p>
+
+    <h3>Sales tonen voor boek</h3>
+    <p>Bij het drukken op de knop "Sales tonen voor boek" wordt een lijst van alle verkopen van het geselecteerde boek getoond. Per verkoop wordt de naam van de winkel, het adres van de winkel, de verkoopdatum en het aantal getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Sale</code> correct hebt geïmplementeerd.</p>
+    <pre><code>ToString</code></pre>
+    <pre><code>Sale</code></pre>
+    <p>Als er geen boek geselecteerd is, wordt er een foutmelding getoond.</p>
+
+    <h3>Sales tonen voor uitgever</h3>
+    <p>Bij het drukken op de knop "Sales tonen voor uitgever" wordt een lijst van alle verkopen van de boeken van de geselecteerde uitgever getoond. Per verkoop wordt de naam van de winkel, het adres van de winkel, de verkoopdatum en het aantal getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Sale</code> correct hebt geïmplementeerd.</p>
+    <pre><code>ToString</code></pre>
+    <pre><code>Sale</code></pre>
+    <p>Als er geen uitgever geselecteerd is, wordt er een foutmelding getoond.</p>
+    <p><strong>Let op:</strong> Het kan zijn dat er voor sommige boeken of uitgevers geen verkopen zijn geregistreerd in de database. In dat geval wordt er een lege lijst getoond.</p>
+

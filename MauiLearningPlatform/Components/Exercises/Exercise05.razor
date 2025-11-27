@@ -1,0 +1,103 @@
+@namespace MauiLearningPlatform.Components.Exercises
+
+
+    <h1>Oefeningen Interfaces en Repositories</h1>
+
+    <h2>Setup</h2>
+    <ul>
+        <li>Open het project <strong>MauiOefeningen</strong>.</li>
+    </ul>
+
+    <h2>Oefening Games</h2>
+    <p>Maak een model <code>Game</code> met volgende properties:</p>
+    <ul>
+        <li><code>int Id</code></li>
+        <li><code>string Naam</code></li>
+        <li><code>int moeilijkheidsgraad</code> (1 tot 5)</li>
+        <li><code>string uitgever</code></li>
+    </ul>
+    
+    <p>Maak een map <strong>Data</strong> met daarin de mappen <strong>IRepositories</strong> en <strong>Repositories</strong>. Maak een Interface en Repository voor het model Game. Registreer de Interface in <code>MauiProgram.cs</code>.</p>
+    
+    <pre><code>Data</code></pre>
+    <pre><code>IRepositories</code></pre>
+    <pre><code>Repositories</code></pre>
+    <pre><code>Game</code></pre>
+    <pre><code>MauiProgram.cs</code></pre>
+
+    <p>Neem deze gegevens over (Copy – Paste):</p>
+    <pre><code>public class GameRepository {
+    private List&lt;Game&gt; Games = new() {
+        new Game() { Id = 1, Naam = "Cluedo", Moeilijkheidsgraad = 2, Uitgever = "Hasbro Gaming" },
+        new Game() { Id = 2, Naam = "Monopoly", Moeilijkheidsgraad = 3, Uitgever = "Parker" },
+        new Game() { Id = 3, Naam = "Machiavelli", Moeilijkheidsgraad = 3, Uitgever = "999 Games" },
+        new Game() { Id = 4, Naam = "Catan", Moeilijkheidsgraad = 4, Uitgever = "999 Games" },
+        new Game() { Id = 5, Naam = "Carcassonne", Moeilijkheidsgraad = 4, Uitgever = "999 Games" },
+        new Game() { Id = 6, Naam = "SpeakOut", Moeilijkheidsgraad = 5, Uitgever = "Hasbro Gaming" },
+        new Game() { Id = 7, Naam = "Skyjo", Moeilijkheidsgraad = 1, Uitgever = "Magilano" },
+    };
+
+    // Methode om de games op te vragen
+    public List&lt;Game&gt; GetGames() {
+        return Games;
+    }
+}</code></pre>
+
+    <p>Maak volgende View met bijhorend ViewModel (Onvolledige code voor GamePage vind je onderaan deze opdracht):</p>
+    <p>Gebruik een grid met 2 kolommen en 2 rijen. Haal de lijst van Games op uit de <code>GameRepository</code> en toon deze in de linkse kolom. Maak een Stacklayout in de rechtse kolom met alle properties van het model Game. Gebruik een slider van 1-5 om de moeilijkheidsgraad in te geven.</p>
+    <p>Als je een game ingeeft, wordt het nieuwe game toegevoegd aan de lijst met games. Als je een item selecteert links, worden de gegevens rechts getoond. Als je op Nieuw Game klikt, worden de velden terug leeggemaakt.</p>
+
+    <h3>Onvolledige code voor de View GamePage:</h3>
+    <pre><code>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ExtraOefeningen.Views.GamePage"
+             xmlns:viewmodel="clr-namespace:ExtraOefeningen.ViewModels"
+             xmlns:model="clr-namespace:ExtraOefeningen.Models"
+             x:DataType="viewmodel:GameViewModel"
+             Title="GamePage"&gt;
+    &lt;Grid RowDefinitions="*,Auto" ColumnDefinitions="*,*" Margin="10"&gt;
+        &lt;CollectionView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" ItemsSource="" SelectedItem="" SelectionMode="Single"&gt;
+            &lt;CollectionView.ItemTemplate&gt;
+                &lt;DataTemplate x:DataType="model:Game"&gt;
+                    &lt;Frame&gt;
+                        &lt;StackLayout&gt;
+                            &lt;Label&gt;
+                                &lt;Label.Text&gt;
+                                    &lt;MultiBinding StringFormat="Naam: {0} ({1})"&gt;
+                                        &lt;Binding Path="Naam"/&gt;
+                                        &lt;Binding Path="Moeilijkheidsgraad"/&gt;
+                                    &lt;/MultiBinding&gt;
+                                &lt;/Label.Text&gt;
+                            &lt;/Label&gt;
+                            &lt;Label Text=""/&gt;
+                        &lt;/StackLayout&gt;
+                    &lt;/Frame&gt;
+                &lt;/DataTemplate&gt;
+            &lt;/CollectionView.ItemTemplate&gt;
+        &lt;/CollectionView&gt;
+        &lt;StackLayout Margin="10" Grid.Row="0" Grid.Column="1"&gt;
+            &lt;HorizontalStackLayout&gt;
+                &lt;Label Text="Id" WidthRequest="200" VerticalOptions="Center"/&gt;
+                &lt;Entry Text=""/&gt;
+            &lt;/HorizontalStackLayout&gt;
+            &lt;HorizontalStackLayout&gt;
+                &lt;Label Text="Naam" WidthRequest="200" VerticalOptions="Center"/&gt;
+                &lt;Entry Text=""/&gt;
+            &lt;/HorizontalStackLayout&gt;
+            &lt;HorizontalStackLayout&gt;
+                &lt;Label Text="Moelijkheidsgraad" WidthRequest="200" VerticalOptions="Center"/&gt;
+                &lt;Slider Value="" Minimum="1" Maximum="5" WidthRequest="100"/&gt;
+            &lt;/HorizontalStackLayout&gt;
+            &lt;HorizontalStackLayout&gt;
+                &lt;Label Text="Uitgever" WidthRequest="200" VerticalOptions="Center"/&gt;
+                &lt;Entry Text=""/&gt;
+            &lt;/HorizontalStackLayout&gt;
+        &lt;/StackLayout&gt;
+        &lt;HorizontalStackLayout Grid.Row="1" Grid.Column="1"&gt;
+            &lt;Button Text="Toevoegen" Command=""/&gt;
+            &lt;Button Text="Nieuw game" Command="" Margin="10,0"/&gt;
+        &lt;/HorizontalStackLayout&gt;
+    &lt;/Grid&gt;
+&lt;/ContentPage&gt;</code></pre>
+

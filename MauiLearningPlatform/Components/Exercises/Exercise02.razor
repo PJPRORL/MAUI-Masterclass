@@ -1,0 +1,36 @@
+@namespace MauiLearningPlatform.Components.Exercises
+
+    <h1>Oefeningen MVVM en databinding</h1>
+
+    <h2>Setup</h2>
+    <ul>
+        <li>Open het project <strong>MauiOefeningen</strong>.</li>
+        <li>Voeg de package <code>Communitytoolkit.Mvvm</code> toe aan je project.</li>
+        <li>Maak een map <strong>ViewModels</strong> aan.</li>
+        <li>Maak een codefile <code>GlobalUsings.cs</code> aan.</li>
+    </ul>
+
+    <pre><code>MauiOefeningen</code></pre>
+    <pre><code>ViewModels</code></pre>
+    <pre><code>GlobalUsings.cs</code></pre>
+
+    <p>Volg het stappenplan om logica te voorzien voor de oefeningen:</p>
+    <ol>
+        <li>Maak een ViewModel aan.</li>
+        <li>Pas de View aan.</li>
+        <li>Voeg registratie toe voor de View en ViewModel in <code>MauiProgram.cs</code>.</li>
+        <li>Injecteer het ViewModel in de code-behind.</li>
+    </ol>
+
+    <h2>Oefening 1</h2>
+    <p>Op de view <code>NaamTonenPage.xaml</code> geef je een naam en een getal in. Het is de bedoeling dat je in het resultaat, na het drukken op de knop "Naam tonen" x keer de naam afdrukt, gescheiden door een komma waarbij X het getal voorstelt. Als je op "Resultaat leegmaken" drukt, wordt het formulier terug leeggemaakt. Gebruik deze methode ook in je constructor.</p>
+    <pre><code>NaamTonenPage.xaml</code></pre>
+
+    <h2>Oefening 2</h2>
+    <p>Op de View <code>VakPage.xaml</code> geef je je gegevens in en als je op de knop drukt, krijg je de uitvoer te zien. Kijk goed naar de uitvoer. Zorg dat je in je constructor de variabelen initialiseert. De datum van de eerste les wordt daarbij ingesteld op de huidige datum.</p>
+    <pre><code>VakPage.xaml</code></pre>
+
+    <h2>Oefening 3</h2>
+    <p>Op de view <code>AfbeeldingenPage</code> zorg je ervoor dat je met de stepper een getal kunt selecteren tussen 1 en 5. Als je op de knop drukt, wordt de overeenkomstige afbeelding 'landschap1.jpg' tot 'landschap5.jpg' getoond.</p>
+    <pre><code>AfbeeldingenPage</code></pre>
+    <p>Uitbreiding: probeer de functionaliteit eens te laten werken zonder knop!</p>
