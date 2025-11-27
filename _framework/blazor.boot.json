@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "MauiLearningPlatform",
   "resources": {
-    "hash": "sha256-DaN0Bm0dgZ6KkZoHCt5sd3iAheh9lduTZ/lHn7+2T2U=",
+    "hash": "sha256-Y4piXuf6DnSyoNrLx+UxcgZvUcitTYAzXz93MhEfVjo=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-vtotCeXt2UD6oc459laJT32vBgigZ+eLoUmdeFkvYDk="
     },
@@ -58,7 +58,7 @@
       "System.Xml.Linq.wasm": "sha256-nZUqq1LQ1iYER5V+ccZ1y3uuv7Hjj42vEGwKqg1UwdE=",
       "System.Xml.XDocument.wasm": "sha256-6qmeMs9bI9S+MhdYK6t1WqAgEsgsiWhLeushBtZP4ZI=",
       "System.Private.CoreLib.wasm": "sha256-uyet4fnNdLVkYMpj/LvGbMuUvnOop48wQ2U7+xCLDxs=",
-      "MauiLearningPlatform.wasm": "sha256-R3bWIqNPzdmYZQZOdX1DOhzkf/vlGHOW2/of3EvZHNA="
+      "MauiLearningPlatform.wasm": "sha256-8OZxte/a1OokChr2BD+O4yD1H6DvMLjtbMIx7ovLrE4="
     }
   },
   "cacheBootResources": true,
