@@ -1,51 +1,5 @@
 @namespace MauiLearningPlatform.Components.Exercises
 
-
-    <h1>Extra oefeningen</h1>
-
-    <h2>Setup</h2>
-    <ul>
-        <li>Open het project <strong>MauiOefeningen</strong>.</li>
-    </ul>
-
-    <h2>Oefening 1</h2>
-    <ol>
-        <li>Maak een nieuw ViewModel <code>VragenlijstViewModel</code>.</li>
-        <li>Maak een nieuwe View <code>VragenlijstPage</code>.</li>
-        <li>Registreer het ViewModel en View in <code>MauiProgram.cs</code>.</li>
-        <li>Injecteer het ViewModel in je View.</li>
-        <li>Voorzie navigatie naar je View.</li>
-    </ol>
-
-    <pre><code>VragenlijstViewModel</code></pre>
-    <pre><code>VragenlijstPage</code></pre>
-    <pre><code>MauiProgram.cs</code></pre>
-
-    <p>Voorzie volgende functionaliteiten: Als je de View opent, moeten alle controls verborgen zijn (isVisible). De controls worden pas zichtbaar als je een Naam hebt ingegeven.</p>
-    <p>Gebruik een Grid om volgende vragenlijst te structureren.</p>
-    <p>Als je de View opent, krijg je onmiddelijk een prompt om je naam in te geven. Gebruik hiervoor een methode die je start in de constructor van je Viewmodel. Als je geen naam ingeeft, krijg je een alert. Zolang je geen naam ingeeft, blijf je deze alert krijgen. Deze methode gaat ook de variabelen initialiseren.</p>
-    <p><code>DisplayPromptAsync</code> en <code>DisplayAlert</code> zijn methoden van <code>Shell.Current</code>. Zoek op hoe je deze moet gebruiken.</p>
-    <p>Je krijgt volgende prompts:</p>
-    <p>Aan de pickers (dropdown) bind je een ItemSource "ItemsPicker". Dit is een lijst die je, in de constructor van het ViewModel, opvult met de waarden "Ja" en "Nee". Aan de Pickers zijn ook respectievelijk "SelectedEten" en "SelectedDrinken" gebind. Op die manier weet je wat de gebruiker selecteert.</p>
-    <p>De waarde van de slider gaat van 0 tot 7. Maak deze waarde ook zichtbaar in een label.</p>
-    <p>Als je op Controleren drukt, controleer je:</p>
-    <ul>
-        <li>of SelectedEten en SelectedDrinken ingevuld is. Indien dit niet het geval is, geef je een alert.</li>
-        <li>of je gezond eet</li>
-        <li>of je voldoende drinkt</li>
-        <li>of je voldoende sport</li>
-    </ul>
-    <p>Geef een gepaste uitvoer.</p>
-    <p>Als je op "Herstarten" drukt, wordt het formulier terug verborgen en worden de variabelen geïnitialiseerd (behalve ItemsPicker). Je krijgt terug de prompt om je naam in te geven.</p>
-
-    <h2>Oefening 2</h2>
-    <p>Maak een programma om Alle Negen te spelen. Het spel gaat als volgt: Op een tafel bevinden zich 9 blokjes (een tabel) met waarde 1 tot 9. Een speler werpt met twee dobbelstenen. De som van de twee ogen wordt opgeteld. Daarna moet de speler met een combinatie van twee blokjes proberen deze som te vormen. Wanneer de speler de som heeft gevormd, worden de blokjes van de tafel weggenomen. De speler werpt opnieuw met de dobbelstenen en het spel gaat verder met de resterende blokjes. Bedoeling van het spel is alle blokjes te verwijderen.</p>
-    
-    <h3>Stappenplan:</h3>
-    <ul>
-        <li><strong>Methode "Herstart":</strong> enable alle knoppen, initialiseer variabelen, vul een array met getallen van 1 tot en met 9. Start de methode "Gooi".</li>
-        <li><strong>Methode "Gooi":</strong> Genereer 2 random getallen van 1 tot 6. Bereken de som van twee getallen en zet het aantalKliks op 0. (Dit is om bij te houden hoeveel getallen je al gekozen hebt) Start de methode ControleTotaal.</li>
-        <li><strong>Methode ControleTotaal:</strong> Deze methode controleert of er nog mogelijk combinaties zijn. Gebruik twee for-lussen om elke mogelijke combinatie na te gaan. Als er geen meer combinatie mogelijk is, disable je alle knoppen, tel je alle resterende getallen in de getallenrij op en geef je de uitslag.</li>
-        <li><strong>Methode Controle:</strong> Als je op een knop klikt, start je deze methode en geef je als argument de waarde van de knop mee. Geef een boolean terug zodat je de knop kunt disablen als er een combinatie met deze waarde mogelijk is. Controleer eerst of je minder dan 2 getallen geselecteerd hebt. Geef een gepaste foutmelding. Controleer daarna of het geselecteerde getal overeenkomt met de Som. Zet in dat geval het overeenkomstige getal in de getallenrij op 0, het aantalkliks op 2, controleer je het totaal en return true. Indien het getal niet overeenkomt met de som, controleer je of er nog andere combinaties met dit getal mogelijk zijn. Indien er een combinatie mogelijk is, trek je het getal af van de som, zet je het getal in de getallenrij op 0, controleer je het totaal en return je true. Als je een derde getal wil aanduiden, moet je een fout krijgen.</li>
-    </ul>
-
+<div class="markdown-content">
+    <h1 id="extra-oefeningen" tabindex="-1"><a class="header-anchor" href="#extra-oefeningen" aria-hidden="true">#</a> Extra oefeningen</h1><h2 id="oefening-1-raad-het-getal" tabindex="-1"><a class="header-anchor" href="#oefening-1-raad-het-getal" aria-hidden="true">#</a> Oefening 1: Raad het getal</h2><p>Maak een nieuw project aan met de naam <strong>GuessTheNumber</strong>. Zorg ervoor dat je de MVVM structuur gebruikt.</p><p>Maak een view <code>GuessPage</code> aan. Deze view bevat een entry veld, een knop &quot;Raad&quot; en een label voor feedback. De computer kiest een willekeurig getal tussen 1 en 100. De gebruiker moet het getal raden. Geef feedback of het getal hoger of lager moet zijn.</p><p><img src="/images/exercises/ex03/ex03_01.png" alt="picture 0"></p><p>Zorg ervoor dat de viewmodel <code>GuessViewModel</code> de logica bevat. Gebruik hiervoor <code>ICommand</code> en <code>ObservableProperty</code>.</p><h2 id="oefening-2-todo-lijst" tabindex="-1"><a class="header-anchor" href="#oefening-2-todo-lijst" aria-hidden="true">#</a> Oefening 2: Todo lijst</h2><p>Maak een nieuw project aan met de naam <strong>TodoList</strong>. Zorg ervoor dat je de MVVM structuur gebruikt.</p><p>Maak een view <code>TodoPage</code> aan. Deze view bevat een entry veld, een knop &quot;Toevoegen&quot; en een lijst met taken. Als je op de knop drukt, wordt de taak toegevoegd aan de lijst.</p><p><img src="/images/exercises/ex03/ex03_02.png" alt="picture 1"></p><p>Zorg ervoor dat de viewmodel <code>TodoViewModel</code> de logica bevat. Gebruik hiervoor <code>ICommand</code>, <code>ObservableProperty</code> en <code>ObservableCollection</code>.</p><h2 id="oefening-3-valuta-converter" tabindex="-1"><a class="header-anchor" href="#oefening-3-valuta-converter" aria-hidden="true">#</a> Oefening 3: Valuta converter</h2><p>Maak een nieuw project aan met de naam <strong>CurrencyConverter</strong>. Zorg ervoor dat je de MVVM structuur gebruikt.</p><p>Maak een view <code>ConverterPage</code> aan. Deze view bevat een entry veld voor het bedrag in Euro, en toont het bedrag in Dollar, Pond en Yen. De wisselkoersen mag je hardcoderen.</p><p><img src="/images/exercises/ex03/ex03_03.png" alt="picture 2"></p><p>Zorg ervoor dat de viewmodel <code>ConverterViewModel</code> de logica bevat. Gebruik hiervoor <code>ObservableProperty</code>.</p>
+</div>

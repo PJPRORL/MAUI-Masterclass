@@ -1,46 +1,55 @@
 @namespace MauiLearningPlatform.Components.Exercises
 
+<div class="markdown-content">
+<h1>Dapper - Select</h1>
 
-    <h1>Dapper - Select</h1>
+<p>In deze oefening werken we met een nieuw project. Dit project is gelinked aan een database genaamd 'Publishers'. Een startproject met de layout is gegeven. Aan jou om alle functionaliteit te voorzien. Je zal dus zelf nog bindings moeten toevoegen en de code moeten schrijven.</p>
+<p><a href="https://gitpub.sebastiaanh.com/public/web/f649498a-d276-4c45-aab5-ff2757918b22" target="_blank" rel="noopener noreferrer">Download het startbestand van GitPub</a> indien je dit nog niet gedaan hebt.</p>
 
-    <h2>Oefening publishers - deel 1</h2>
+<h2>Oefening publishers - deel 1</h2>
 
-    <h3>Database diagram</h3>
-    <p><em>(Zie bronwebsite voor diagram)</em></p>
+<h3>Database diagram</h3>
+<p><em>(Zie bronwebsite voor diagram)</em></p>
 
-    <h3>Store model maken</h3>
-    <p>Maak een model voor de tabel <code>Store</code>.</p>
+<h3>Store model maken</h3>
+<p>Maak een model voor de tabel <code>Store</code>.</p>
 
-    <h3>Interface en repository</h3>
-    <p>Voorzie een interface en repository voor de tabel <code>Store</code>. Volgende methodes moeten aanwezig zijn:</p>
-    <pre><code>public List&lt;Store&gt; OphalenStoresViaStaat(string staat);
+<h3>Interface en repository</h3>
+<p>Voorzie een interface en repository voor de tabel <code>Store</code>. Volgende methodes moeten aanwezig zijn:</p>
+<pre><code>public List&lt;Store&gt; OphalenStoresViaStaat(string staat);
 public List&lt;Store&gt; OphalenStoresViaNaam(string naam);
 public List&lt;Store&gt; OphalenStoresViaNaamEnStaat(string naam, string staat);
 public Store OphalenStoreViaId(int id);</code></pre>
 
-    <h3>Werkwijze</h3>
+<h3>Werkwijze</h3>
 
-    <h4>Winkels ophalen via naam</h4>
-    <p>Bij het drukken op de knop 'Ophalen via naam', wordt de lijst met winkels opgevuld met alle winkels waarbij de naam de ingevulde tekst bevat. Is er niets ingevuld, dan worden alle winkel getoond. Winkels worden gesorteerd op basis van hun naam.</p>
+<h4>Winkels ophalen via naam</h4>
+<p>Bij het drukken op de knop 'Ophalen via naam', wordt de lijst met winkels opgevuld met alle winkels waarbij de naam de ingevulde tekst bevat. Is er niets ingevuld, dan worden alle winkel getoond. Winkels worden gesorteerd op basis van hun naam.</p>
+<p><img src="/images/exercises/ex08/ophalen_naam.png" alt="" /></p>
 
-    <h4>Winkels ophalen via staat</h4>
-    <p>Bij het drukken op de knop 'Ophalen via staat', wordt de lijst met winkels opgevuld met alle winkels waarbij de staat de ingevulde tekst bevat. Is er niets ingevuld, dan worden alle winkel getoond. Winkels worden gesorteerd op basis van hun naam.</p>
+<h4>Winkels ophalen via staat</h4>
+<p>Bij het drukken op de knop 'Ophalen via staat', wordt de lijst met winkels opgevuld met alle winkels waarbij de staat de ingevulde tekst bevat. Is er niets ingevuld, dan worden alle winkel getoond. Winkels worden gesorteerd op basis van hun naam.</p>
+<p><img src="/images/exercises/ex08/ophalen_staat.png" alt="" /></p>
 
-    <h4>Winkels ophalen via naam en staat</h4>
-    <p>Bij het drukken op de knop 'Ophalen via naam en staat', wordt de lijst met winkels opgevuld met alle winkels waarbij de naam en staat de ingevulde tekst bevat. Is er niets ingevuld, dan worden alle winkels getoond. Winkels worden gesorteerd op basis van hun naam.</p>
+<h4>Winkels ophalen via naam en staat</h4>
+<p>Bij het drukken op de knop 'Ophalen via naam en staat', wordt de lijst met winkels opgevuld met alle winkels waarbij de naam en staat de ingevulde tekst bevat. Is er niets ingevuld, dan worden alle winkels getoond. Winkels worden gesorteerd op basis van hun naam.</p>
+<p><img src="/images/exercises/ex08/ophalen_naam_staat.png" alt="" /></p>
 
-    <h4>Winkel ophalen via id</h4>
-    <p>Bij het drukken op de knop 'Ophalen via id', wordt een melding getoond met de naam van de winkel. Is er geen winkel met het ingevulde id, dan wordt een melding getoond dat er geen winkel gevonden is.</p>
+<h4>Winkel ophalen via id</h4>
+<p>Bij het drukken op de knop 'Ophalen via id', wordt een melding getoond met de naam van de winkel. Is er geen winkel met het ingevulde id, dan wordt een melding getoond dat er geen winkel gevonden is.</p>
+<p><img src="/images/exercises/ex08/ophalen_id_found.png" alt="" /></p>
+<p><img src="/images/exercises/ex08/ophalen_id_not_found.png" alt="" /></p>
 
-    <h2>Oefening publishers - deel 2</h2>
-    <p>In deze oefening ga je zelf bepalen wat de methodes zijn die horen tot de interface en bepaal je zelf de werking van de methodes. Je kan hiervoor gebruik maken van de vorige oefening. Een startformulier is gegeven. Je kan zelf nog bindings toevoegen en de code schrijven.</p>
-    <p>Volgende functionaliteit moet worden voorzien:</p>
-    <ul>
-        <li>Ophalen van alle werknemers</li>
-        <li>Ophalen van alle werknemers die een bepaalde job uitoefenen. Het selecteren van de job gebeurt adhv een combobox. Deze data moet uiteraard ook uit de database komen.</li>
-        <li>Ophalen van alle werknemers die bij een bepaalde publisher werken. Het selecteren van de publisher gebeurt adhv een combobox. Deze data moet uiteraard ook uit de database komen.</li>
-        <li>Ophalen van alle werknemers die bij een bepaalde publisher werken en een bepaalde job uitoefenen.</li>
-        <li>Ophalen van alle werknemers die voor een bepaalde datum gestart zijn.</li>
-        <li>De gegevens tonen van één bepaalde werknemer in een messagebox.</li>
-    </ul>
+<h2>Oefening publishers - deel 2</h2>
+<p>In deze oefening ga je zelf bepalen wat de methodes zijn die horen tot de interface en bepaal je zelf de werking van de methodes. Je kan hiervoor gebruik maken van de vorige oefening. Een startformulier is gegeven. Je kan zelf nog bindings toevoegen en de code schrijven.</p>
+<p>Volgende functionaliteit moet worden voorzien:</p>
+<ul>
+    <li>Ophalen van alle werknemers</li>
+    <li>Ophalen van alle werknemers die een bepaalde job uitoefenen. Het selecteren van de job gebeurt adhv een combobox. Deze data moet uiteraard ook uit de database komen.</li>
+    <li>Ophalen van alle werknemers die bij een bepaalde publisher werken. Het selecteren van de publisher gebeurt adhv een combobox. Deze data moet uiteraard ook uit de database komen.</li>
+    <li>Ophalen van alle werknemers die bij een bepaalde publisher werken en een bepaalde job uitoefenen.</li>
+    <li>Ophalen van alle werknemers die voor een bepaalde datum gestart zijn.</li>
+    <li>De gegevens tonen van één bepaalde werknemer in een messagebox.</li>
+</ul>
+</div>
 

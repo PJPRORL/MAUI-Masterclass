@@ -1,54 +1,31 @@
 @namespace MauiLearningPlatform.Components.Exercises
 
-
-    <h1>Dapper inner joins deel 2</h1>
-
-    <h2>Modellen uitbreiden</h2>
-    <p>Zorg dat je alle klassen van het ERD hebt aangemaakt. Het ERD vind je in de oefeningen van H7.</p>
-    <p>Voeg meervoudige navigation properties toe aan de klassen <code>Publisher</code>, <code>Store</code> en <code>Book</code>:</p>
-    <ul>
-        <li><code>Publisher</code> heeft een lijst van <code>Books</code></li>
-        <li><code>Book</code> heeft een lijst van <code>Authors</code></li>
-        <li><code>Store</code> heeft een lijst van <code>Sales</code></li>
-        <li><code>Author</code> heeft een lijst van <code>Books</code></li>
-    </ul>
-
-    <p>Voeg in <code>Publisher</code> een methode <code>TitleInfo()</code> toe om een overzicht te geven van alle titels die door deze uitgever gepubliceerd zijn en de bijhorende auteurs.</p>
-    <pre><code>public string TitleInfo() {
-    string result = "";
-    if (this.Books.Count() >= 1) {
+<div class="markdown-content">
+    <h1 id="dapper-inner-joins-deel-2" tabindex="-1"><a class="header-anchor" href="#dapper-inner-joins-deel-2" aria-hidden="true">#</a> Dapper inner joins deel 2</h1><p>In deze oefening werk je de publishers opdracht verder uit. Je gaat data ophalen uit meerdere tabellen door middel van een joins. Je zal hiervoor Dapper gebruiken.</p><p>Je kan voor deze oefening vertrekken van je eigen oplossing van de vorige oefening. Indien je dit niet hebt, kan je de oplossing van de vorige oefening gebruiken of <a href="https://gitpub.sebastiaanh.com/public/web/af9c7ecc-2af5-45c7-896d-c1828fd0748a/" target="_blank" rel="noopener noreferrer">het startbestand</a> downloaden.</p><p>Je gaat op de View van de vorige les (NavigationProperties) enkele wijzigingen aanbrengen. Je gaat de repositories uitbreiden zodat je in je CollectionView items kunt selecteren en op basis van het geselecteerde object een detailoverzicht kunt geven onder de CollectionView. Zo wil je bv een winkel kunnen selecteren en de verkopen zien. Of een uitgever selecteren en tonen welke boeken er al zijn verschenen van deze uitgever.</p><p><img src="/images/exercises/ex10/overview.png" alt="picture 0"></p><p>Voor elk van de nieuwe opdrachten moet je alle informatie ophalen met één query! Aangezien je op je view werkt met één CollectionView die <strong>verschillende</strong> objecten laat zien, is het niet mogelijk om een detail CollectionView te maken en die te binden aan individuele properties van een klasse. Je gaat in de plaats een StringOutput moeten gebruiken die je opvult met een methode in de klasse. Op het moment dat je dan een item selecteert in de CollectionView, controleer je het type van het object en kun je de methode van de klasse opvragen. We gaan eerst de klassen uitbreiden.</p><h2 id="modellen-uitbreiden" tabindex="-1"><a class="header-anchor" href="#modellen-uitbreiden" aria-hidden="true">#</a> Modellen uitbreiden</h2><p>Zorg dat je alle klassen van het ERD hebt aangemaakt. Het ERD vind je in de oefeningen van H7.</p><p>Voeg meervoudige navigation properties toe aan de klassen <code>Publisher</code>, <code>Store</code> en <code>Book</code>:</p><ul><li><code>Publisher</code> heeft een lijst van <code>Books</code></li><li><code>Book</code> heeft een lijst van <code>Authors</code></li><li><code>Store</code> heeft een lijst van <code>Sales</code></li><li><code>Author</code> heeft een lijst van <code>Books</code></li></ul><p>Voeg in <code>Publisher</code> een methode <code>TitleInfo()</code> toe om een overzicht te geven van alle titels die door deze uitgever gepubliceerd zijn en de bijhorende auteurs.</p><pre><code>public string TitleInfo() {
+    string result = &quot;&quot;;
+    if (this.Books.Count() &gt;= 1) {
         foreach (Book book in this.Books) {
-            result += $"{book.Title} {book.AuthorInfo()} \n\n";
+            result += $&quot;{book.Title} {book.AuthorInfo()} \n\n&quot;;
         }
     } else {
-        result += $"{this.Name} heeft geen publicaties.";
+        result += $&quot;{this.Name} heeft geen publicaties.&quot;;
     }
     return result;
-}</code></pre>
-
-    <p>Maak in <code>Book</code> een method <code>AuthorInfo()</code> die een overzicht toont van de auteurs die het boek geschreven hebben.</p>
-    <p>Maak in <code>Store</code> de methode <code>SalesInfo()</code> die per verkoop in de winkel het ordernummer, het verkochte boek en het aantal weergeeft.</p>
-
-    <h2>Repositories</h2>
-    <p>Pas de repositories aan zodat je met één query de benodigde gegevens kunt ophalen. Denk er aan dat je eventueel de interface moet aanmaken of aanpassen.</p>
-
-    <h3>Publisher</h3>
-    <p>Pas de code waarmee uitgevers opgehaald wordt aan zodat deze query ook de gepubliceerde boeken ophaalt. Natuurlijk moet het nog steeds mogelijk zijn om de resultaten te filteren via de group tekstinvoer.</p>
-    <pre><code>public IEnumerable&lt;Publisher&gt; OphalenPublishers(string zoekterm) {
-    string sql = @@"SELECT P.*, '' AS SplitCol, B.*, '' AS SplitCol, A.* 
+}</code></pre><p>Onderstaand screenshot toont hoe dit wordt getoond in de lijst.</p><p><img src="/images/exercises/ex10/publisher_titleinfo.png" alt="picture 1"></p><p>Maak in <code>Book</code> een method <code>AuthorInfo()</code> die een overzicht toont van de auteurs die het boek geschreven hebben.</p><p><img src="/images/exercises/ex10/book_authorinfo.png" alt="picture 2"></p><p>Maak in <code>Store</code> de methode <code>SalesInfo()</code> die per verkoop in de winkel het ordernummer, het verkochte boek en het aantal weergeeft.</p><p><img src="/images/exercises/ex10/store_salesinfo.png" alt="picture 3"></p><h2 id="repositories" tabindex="-1"><a class="header-anchor" href="#repositories" aria-hidden="true">#</a> Repositories</h2><p>Pas de repositories aan zodat je met één query de benodigde gegevens kunt ophalen. Denk er aan dat je eventueel de interface moet aanmaken of aanpassen.</p><h3>Publisher</h3><p>Pas de code waarmee uitgevers opgehaald wordt aan zodat deze query ook de gepubliceerde boeken ophaalt. Natuurlijk moet het nog steeds mogelijk zijn om de resultaten te filteren via de group tekstinvoer.</p><pre><code>public IEnumerable&lt;Publisher&gt; OphalenPublishers(string zoekterm) {
+    string sql = @@&quot;SELECT P.*, &#39;&#39; AS SplitCol, B.*, &#39;&#39; AS SplitCol, A.* 
                    FROM Publisher P 
                    LEFT JOIN Book B on P.Id = B.publisherId 
                    LEFT JOIN TitleAuthor TA on B.Id = TA.bookId 
                    LEFT JOIN Author A on A.Id = TA.authorId 
-                   WHERE name LIKE '%' + @@zoekterm + '%' 
-                   ORDER BY name";
+                   WHERE name LIKE &#39;%&#39; + @@zoekterm + &#39;%&#39; 
+                   ORDER BY name&quot;;
     using (IDbConnection db = new SqlConnection(ConnectionString)) {
         var publishers = db.Query&lt;Publisher, Book, Author, Publisher&gt;(sql, (publisher, book, author) =&gt; {
             book.Publisher = publisher;
             book.Authors = [author];
             publisher.Books = [book];
             return publisher;
-        }, new { zoekterm = zoekterm }, splitOn: "SplitCol");
+        }, new { zoekterm = zoekterm }, splitOn: &quot;SplitCol&quot;);
         
         var gegroepeerdePublishers = GroepeerPublishers(publishers);
         return gegroepeerdePublishers.Select(p =&gt; {
@@ -56,26 +33,14 @@
             return p;
         });
     }
-}</code></pre>
-
-    <p>Werk de methode voor <code>GroepeerBooks</code> en <code>GroepeerPublishers</code> uit.</p>
-    <p>Pas de view <code>NavigationProperties</code> aan zodat er onder de CollectionView een label staat met als naam <code>StringOutput</code>.</p>
-    <p>Wijzig het viewmodel <code>NavigationPropertiesViewModel</code> zodat de details van de boeken worden getoond als je een uitgever selecteert. Je controleert of het object een Publisher is en dan vul je de variabele <code>StringOutput</code> op met de details.</p>
-    <pre><code>[ObservableProperty] public string stringOutput;
+}</code></pre><p>In bovenstaande code zie je dat er in de sql-code <em>SplitCol</em> gebruikt is. We halen met de query alle uitgevers op en met de <strong>left join</strong> koppelen we die aan de andere tabellen. Je krijgt dan wel een aantal uitgevers zonder boeken maar je kunt wel alle uitgevers tonen. Met behulp van de SplitCol geef je aan waar de tabellen moeten gesplitst worden, ook al zijn er lege cellen. Met een <strong>inner join</strong> hoef je geen SplitCol te gebruiken maar dan worden enkel de uitgevers getoond met boeken.</p><p>Werk de methode voor <code>GroepeerBooks</code> en <code>GroepeerPublishers</code> uit.</p><p>Pas de view <code>NavigationProperties</code> aan zodat er onder de CollectionView een label staat met als naam <code>StringOutput</code>.</p><p>Wijzig het viewmodel <code>NavigationPropertiesViewModel</code> zodat de details van de boeken worden getoond als je een uitgever selecteert. Je controleert of het object een Publisher is en dan vul je de variabele <code>StringOutput</code> op met de details.</p><pre><code>[ObservableProperty] public string stringOutput;
 partial void OnSelectedItemChanging(object value) {
     var selectedItem = value;
     if (selectedItem is Publisher) {
-        StringOutput = "Publicaties:";
+        StringOutput = &quot;Publicaties:&quot;;
         var publisher = (Publisher)selectedItem;
         StringOutput += publisher.TitleInfo();
     }
-}</code></pre>
-
-    <h3>Book</h3>
-    <p>Pas de code waarmee boeken opgehaald worden aan zodat ook de auteurs van de boeken opgehaald worden. Voeg ook de mogelijkheid toe om te filteren via de tekstinvoer. De filter voor de auteur naam moet zowel op voor- als achternaam filteren.</p>
-    <p>Als een item in de CollectionView geselecteerd wordt, dan worden de schrijvers van dat boek getoond in het Label.</p>
-
-    <h3>Store</h3>
-    <p>Als op de knop "Winkels ophalen" gedrukt wordt, worden alle winkels opgehaald en alle verkopen die in deze winkel gebeurd zijn. Gebruik deze informatie om de CollectionView op te vullen.</p>
-    <p>Als een item in de CollectionView geselecteerd wordt, dan worden de verkopen die in deze winkel plaatsgevonden hebben, getoond in het Label.</p>
+}</code></pre><p>Je zou dan volgend resultaat moeten krijgen:</p><p><img src="/images/exercises/ex10/publisher_details.png" alt="picture 4"></p><h3>Book</h3><p>Pas de code waarmee boeken opgehaald worden aan zodat ook de auteurs van de boeken opgehaald worden. Voeg ook de mogelijkheid toe om te filteren via de tekstinvoer. De filter voor de auteur naam moet zowel op voor- als achternaam filteren.</p><p><img src="/images/exercises/ex10/book_list.png" alt="picture 5"></p><p>Als een item in de CollectionView geselecteerd wordt, dan worden de schrijvers van dat boek getoond in het Label.</p><p><img src="/images/exercises/ex10/book_details.png" alt="picture 6"></p><h3>Store</h3><p>Als op de knop &quot;Winkels ophalen&quot; gedrukt wordt, worden alle winkels opgehaald en alle verkopen die in deze winkel gebeurd zijn. Gebruik deze informatie om de CollectionView op te vullen.</p><p><img src="/images/exercises/ex10/store_list.png" alt="picture 9"></p><p>Als een item in de CollectionView geselecteerd wordt, dan worden de verkopen die in deze winkel plaatsgevonden hebben, getoond in het Label.</p><p><img src="/images/exercises/ex10/store_details.png" alt="picture 8"></p>
+</div>
 

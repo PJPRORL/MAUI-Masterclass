@@ -1,38 +1,6 @@
 @namespace MauiLearningPlatform.Components.Exercises
 
-
-    <h1>Dapper inner joins deel 1</h1>
-
-    <h2>Functionaliteit</h2>
-
-    <h3>Werknemers ophalen</h3>
-    <p>Bij het drukken op de knop "Werknemers ophalen" wordt een lijst van alle werknemers getoond. Per werknemer wordt de voornaam, achternaam, uitgever en jobbeschrijving getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Employee</code> correct hebt geïmplementeerd.</p>
-    <pre><code>ToString</code></pre>
-    <pre><code>Employee</code></pre>
-    <p>Indien er in het veldje Uitgever een waarde is ingevuld, worden enkel de werknemers van die uitgever getoond.</p>
-
-    <h3>Uitgevers ophalen</h3>
-    <p>Bij het drukken op de knop "Uitgevers ophalen" wordt een lijst van alle uitgevers getoond. Per uitgever wordt de naam getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Publisher</code> correct hebt geïmplementeerd.</p>
-    <pre><code>ToString</code></pre>
-    <pre><code>Publisher</code></pre>
-    <p>Indien er in het veldje Uitgever een waarde is ingevuld, worden enkel de uitgevers getoond die voldoen aan de zoekopdracht.</p>
-
-    <h3>Boeken ophalen</h3>
-    <p>Bij het drukken op de knop "Boeken ophalen" wordt een lijst van alle boeken getoond. Per boek wordt de titel, uitgever en datum van uitgave getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Book</code> correct hebt geïmplementeerd.</p>
-    <pre><code>ToString</code></pre>
-    <pre><code>Book</code></pre>
-    <p>Indien er in het veldje "Boek" een waarde is ingevuld, worden enkel de boeken getoond die voldoen aan de zoekopdracht.</p>
-
-    <h3>Sales tonen voor boek</h3>
-    <p>Bij het drukken op de knop "Sales tonen voor boek" wordt een lijst van alle verkopen van het geselecteerde boek getoond. Per verkoop wordt de naam van de winkel, het adres van de winkel, de verkoopdatum en het aantal getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Sale</code> correct hebt geïmplementeerd.</p>
-    <pre><code>ToString</code></pre>
-    <pre><code>Sale</code></pre>
-    <p>Als er geen boek geselecteerd is, wordt er een foutmelding getoond.</p>
-
-    <h3>Sales tonen voor uitgever</h3>
-    <p>Bij het drukken op de knop "Sales tonen voor uitgever" wordt een lijst van alle verkopen van de boeken van de geselecteerde uitgever getoond. Per verkoop wordt de naam van de winkel, het adres van de winkel, de verkoopdatum en het aantal getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Sale</code> correct hebt geïmplementeerd.</p>
-    <pre><code>ToString</code></pre>
-    <pre><code>Sale</code></pre>
-    <p>Als er geen uitgever geselecteerd is, wordt er een foutmelding getoond.</p>
-    <p><strong>Let op:</strong> Het kan zijn dat er voor sommige boeken of uitgevers geen verkopen zijn geregistreerd in de database. In dat geval wordt er een lege lijst getoond.</p>
+<div class="markdown-content">
+    <h1 id="dapper-inner-joins-deel-1" tabindex="-1"><a class="header-anchor" href="#dapper-inner-joins-deel-1" aria-hidden="true">#</a> Dapper inner joins deel 1</h1><p>In deze oefening werken we de publishers opdracht verder uit. We gaan data ophalen uit meerdere tabellen door middel van een inner join. We zullen hiervoor Dapper gebruiken.</p><p>Je kan voor deze oefening vertrekken van je eigen oplossing van de vorige oefening. Indien je dit niet hebt, kan je de oplossing van de vorige oefening gebruiken of <a href="https://gitpub.sebastiaanh.com/public/web/6e86d8a7-dda5-464b-a1ae-ad6eff886fa4" target="_blank" rel="noopener noreferrer">het startbestand</a> downloaden.</p><h2 id="modellen-uitbreiden" tabindex="-1"><a class="header-anchor" href="#modellen-uitbreiden" aria-hidden="true">#</a> Modellen uitbreiden</h2><p>Maak modellen aan voor de overblijvende tabellen in de database.</p><p>Voeg navigatie properties toe aan de klasse <code>Employee</code>, <code>Sale</code> en <code>Book</code>. In het ERD diagram uit het vorige hoofdstuk kan je zien welke navigatie properties je moet toevoegen.</p><p>Vervolgens voeg je enkele <code>ToString</code>-methodes toe aan de klassen.</p><ul><li>Job: de beschrijving wordt getoond</li><li>Publisher: de naam wordt getoond</li><li>Store: de naam wordt getoond alsook het adres, postcode en stad</li><li>Employee: de voornaam en achternaam worden getoond alsook de uitgever en de jobbeschrijving.</li><li>Sale: de naam van de winkel wordt getoond alsook het adres van de winkel. Daarnaast wordt de verkoopdatum en het aantal getoond.</li><li>Book: de titel wordt getoond alsook de uitgever en de datum van uitgave.</li></ul><h2 id="functionaliteit" tabindex="-1"><a class="header-anchor" href="#functionaliteit" aria-hidden="true">#</a> Functionaliteit</h2><h3>Werknemers ophalen</h3><p>Bij het drukken op de knop &quot;Werknemers ophalen&quot; wordt een lijst van alle werknemers getoond. Per werknemer wordt de voornaam, achternaam, uitgever en jobbeschrijving getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Employee</code> correct hebt geïmplementeerd.</p><p>Indien er in het veldje <code>Uitgever</code> een waarde is ingevuld, worden enkel de werknemers van die uitgever getoond.</p><p><img src="/images/exercises/ex09/werknemers_all.png" alt="picture 3"></p><p><img src="/images/exercises/ex09/werknemers_filtered.png" alt="picture 4"></p><h3>Uitgevers ophalen</h3><p>Bij het drukken op de knop &quot;Uitgevers ophalen&quot; wordt een lijst van alle uitgevers getoond. Per uitgever wordt de naam getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Publisher</code> correct hebt geïmplementeerd.</p><p>Indien er in het veldje <code>Uitgever</code> een waarde is ingevuld, worden enkel de uitgevers getoond die voldoen aan de zoekopdracht.</p><p><img src="/images/exercises/ex09/uitgevers_all.png" alt="picture 5"></p><p><img src="/images/exercises/ex09/uitgevers_filtered.png" alt="picture 6"></p><h3>Boeken ophalen</h3><p>Bij het drukken op de knop &quot;Boeken ophalen&quot; wordt een lijst van alle boeken getoond. Per boek wordt de titel, uitgever en datum van uitgave getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Book</code> correct hebt geïmplementeerd.</p><p>Indien er in het veldje &quot;Boek&quot; een waarde is ingevuld, worden enkel de boeken getoond die voldoen aan de zoekopdracht.</p><p><img src="/images/exercises/ex09/boeken_all.png" alt="picture 7"></p><p><img src="/images/exercises/ex09/boeken_filtered.png" alt="picture 8"></p><h3>Sales tonen voor boek</h3><p>Bij het drukken op de knop &quot;Sales tonen voor boek&quot; wordt een lijst van alle verkopen van het geselecteerde boek getoond. Per verkoop wordt de naam van de winkel, het adres van de winkel, de verkoopdatum en het aantal getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Sale</code> correct hebt geïmplementeerd.</p><p>Als er geen boek geselecteerd is, wordt er een foutmelding getoond.</p><p><img src="/images/exercises/ex09/sales_boek.png" alt="picture 9"></p><p><img src="/images/exercises/ex09/sales_boek_error.png" alt="picture 10"></p><h3>Sales tonen voor uitgever</h3><p>Bij het drukken op de knop &quot;Sales tonen voor uitgever&quot; wordt een lijst van alle verkopen van de boeken van de geselecteerde uitgever getoond. Per verkoop wordt de naam van de winkel, het adres van de winkel, de verkoopdatum en het aantal getoond. Deze data wordt automatisch getoond als je de <code>ToString</code> methode van de klasse <code>Sale</code> correct hebt geïmplementeerd.</p><p>Als er geen uitgever geselecteerd is, wordt er een foutmelding getoond.</p><p><img src="/images/exercises/ex09/sales_uitgever.png" alt="picture 11"></p><p><img src="/images/exercises/ex09/sales_uitgever_error.png" alt="picture 12"></p><p><strong>Let op:</strong> Het kan zijn dat er voor sommige boeken of uitgevers geen verkopen zijn geregistreerd in de database. In dat geval wordt er een lege lijst getoond.</p>
+</div>
 

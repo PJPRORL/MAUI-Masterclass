@@ -1,25 +1,8 @@
 @namespace MauiLearningPlatform.Components.Exercises
 
-
-    <h1>Navigation</h1>
-
-    <h2>Setup</h2>
-    <ul>
-        <li>Open het project <strong>MauiOefeningen</strong>.</li>
-    </ul>
-
-    <h2>Oefening - Persoon</h2>
-    <p>Maak een model <code>Persoon</code> met twee properies:</p>
-    <ul>
-        <li><code>string Voornaam</code></li>
-        <li><code>datetime Geboortedatum</code> (standaard huidige datum)</li>
-    </ul>
-    <p>Maak een view om personen toe te voegen aan een <code>ObservableCollection</code> en toon deze op het scherm. Met een knop "Tonen" wordt deze <code>ObservableCollection</code> doorgegeven aan een tweede View waar de namen opnieuw getoond worden en waar je de gemiddelde leeftijd berekent.</p>
-
-    <h2>Oefening GetallenDoorgeven</h2>
-    <p>Geef twee getallen in op de eerste pagina en geef die door aan een tweede pagina. Toon op de tweede pagina welk getal het grootste of kleinste is.</p>
-    <p>Op de tweede view wil je het resultaat tonen. Dit kun je doen door met een knop een methode te starten die getal1 en getal2 gaat vergelijken. Een andere manier is door een methode te starten als de pagina geladen wordt.</p>
-
-    <h2>Menu</h2>
-    <p>Zoek op volgende site hoe je je FlyoutMenu kunt organiseren zodat de oefeningen bij elkaar staan in tabs. <a href="https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/flyout?view=net-maui-8.0" target="_blank">https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/flyout?view=net-maui-8.0</a></p>
-
+<div class="markdown-content">
+    <h1 id="oefeningen-navigatie" tabindex="-1"><a class="header-anchor" href="#oefeningen-navigatie" aria-hidden="true">#</a> Oefeningen Navigatie</h1><h2 id="oefening-1-navigatie-met-parameters" tabindex="-1"><a class="header-anchor" href="#oefening-1-navigatie-met-parameters" aria-hidden="true">#</a> Oefening 1: Navigatie met parameters</h2><p>Maak een nieuw project aan met de naam <strong>NavigationDemo</strong>. Zorg ervoor dat je de MVVM structuur gebruikt.</p><p>Maak een view <code>MainPage</code> met een entry veld en een knop &quot;Ga naar detail&quot;.</p><p>Maak een view <code>DetailPage</code> die de ingegeven tekst toont.</p><p>Gebruik <code>Shell.Current.GoToAsync</code> om te navigeren en geef de tekst mee als parameter.</p><p><img src="/images/exercises/ex06/ex06_01.png" alt="picture 0"></p><p>Zorg ervoor dat de viewmodel <code>MainViewModel</code> en <code>DetailViewModel</code> de logica bevatten. Gebruik <code>QueryProperty</code> om de parameter op te vangen.</p><h2 id="oefening-2-tabbar-navigatie" tabindex="-1"><a class="header-anchor" href="#oefening-2-tabbar-navigatie" aria-hidden="true">#</a> Oefening 2: TabBar navigatie</h2><p>Maak een nieuw project aan met de naam <strong>TabBarDemo</strong>. Zorg ervoor dat je de MVVM structuur gebruikt.</p><p>Maak 3 views: <code>HomePage</code>, <code>SettingsPage</code> en <code>ProfilePage</code>.</p><p>Configureer <code>AppShell.xaml</code> om deze 3 pagina's in een TabBar weer te geven.</p><p><img src="/images/exercises/ex06/ex06_02.png" alt="picture 1"></p><p>Zorg voor gepaste iconen en titels.</p><h2 id="oefening-3-flyout-navigatie" tabindex="-1"><a class="header-anchor" href="#oefening-3-flyout-navigatie" aria-hidden="true">#</a> Oefening 3: Flyout navigatie</h2><p>Maak een nieuw project aan met de naam <strong>FlyoutDemo</strong>. Zorg ervoor dat je de MVVM structuur gebruikt.</p><p>Maak 3 views: <code>InboxPage</code>, <code>OutboxPage</code> en <code>SpamPage</code>.</p><p>Configureer <code>AppShell.xaml</code> om deze 3 pagina's in een Flyout menu weer te geven.</p><p><img src="/images/exercises/ex06/ex06_03.png" alt="picture 2"></p><p>Zorg voor gepaste iconen en titels. Voeg ook een Header toe aan de Flyout.</p>
+<h2>Menu</h2>
+<p>Zoek op volgende site hoe je je FlyoutMenu kunt organiseren zodat de oefeningen bij elkaar staan in tabs. <a href="https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/flyout?view=net-maui-8.0" target="_blank">https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/flyout?view=net-maui-8.0</a></p>
+<p><img src="/images/exercises/ex06/menu.png" alt="picture 0" /></p>
+</div>
