@@ -8,6 +8,7 @@
         <div class="header-actions">
             <button class="action-btn" @onclick="ExportProject" title="Export Project">⬇️</button>
             <button class="action-btn" @onclick="TriggerImport" title="Import Project">⬆️</button>
+            <button class="action-btn" @onclick="TriggerImageUpload" title="Upload Image">🖼️</button>
             <button class="add-btn" @onclick="ShowAddModal" title="Add New File">+</button>
         </div>
     </div>
@@ -20,7 +21,7 @@
                 {
                     <div class="file-item @(ProjectState.ActiveFile == file ? "active" : "")" 
                          @onclick="() => SelectFile(file)">
-                        <span class="file-icon">@(file.Type == "csharp" ? "📄" : "🎨")</span>
+                        <span class="file-icon">@(GetFileIcon(file.Type))</span>
                         <span class="file-name">@file.Name</span>
                         <span class="delete-btn" @onclick="() => ShowDeleteModal(file)" @onclick:stopPropagation="true">🗑️</span>
                     </div>
@@ -31,6 +32,7 @@
 </div>
 
 <InputFile id="importInput" OnChange="HandleFileSelected" hidden />
+<InputFile id="imageInput" OnChange="HandleImageSelected" accept="image/*" hidden />
 
 @if (ShowAddDialog)
 {
@@ -43,8 +45,14 @@
                     <option value="">(Root)</option>
                     <option value="Views">Views</option>
                     <option value="ViewModels">ViewModels</option>
-                    <option value="Services">Services</option>
                     <option value="Models">Models</option>
+                    <option value="Services">Services</option>
+                    <option value="Data/Repositories">Data/Repositories</option>
+                    <option value="Data/IRepositories">Data/IRepositories</option>
+                    <option value="Resources/Styles">Resources/Styles</option>
+                    <option value="Platforms/Android">Platforms/Android</option>
+                    <option value="Platforms/iOS">Platforms/iOS</option>
+                    <option value="Platforms/Windows">Platforms/Windows</option>
                 </select>
             </div>
             <div class="form-group">
@@ -209,6 +217,18 @@
         ProjectState.SetActiveFile(file);
     }
 
+    private string GetFileIcon(string type)
+    {
+        return type switch
+        {
+            "csharp" => "📄",
+            "xml" => "🎨",
+            "image" => "🖼️",
+            "json" => "⚙️",
+            _ => "📄"
+        };
+    }
+
     private async Task ExportProject()
     {
         var json = ProjectState.ExportProject();
@@ -221,6 +241,11 @@
         await JSRuntime.InvokeVoidAsync("triggerClick", "importInput");
     }
 
+    private async Task TriggerImageUpload()
+    {
+        await JSRuntime.InvokeVoidAsync("triggerClick", "imageInput");
+    }
+
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
         var file = e.File;
@@ -230,6 +255,30 @@
             using var reader = new StreamReader(stream);
             var json = await reader.ReadToEndAsync();
             ProjectState.ImportProject(json);
+        }
+    }
+
+    private async Task HandleImageSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            // Limit size to 2MB
+            var maxFileSize = 2 * 1024 * 1024;
+            try 
+            {
+                using var stream = file.OpenReadStream(maxFileSize);
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                var base64 = Convert.ToBase64String(ms.ToArray());
+                var content = $"data:{file.ContentType};base64,{base64}";
+                
+                ProjectState.AddFile($"Resources/Images/{file.Name}", content, "image");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error uploading image: {ex.Message}");
+            }
         }
     }
 
@@ -248,8 +297,8 @@
         // Auto-append extension if missing based on folder
         if (!NewFileName.Contains("."))
         {
-            if (NewFileFolder == "Views") NewFileName += ".xaml";
-            else NewFileName += ".cs";
+            if (NewFileFolder == "Views" || NewFileFolder == "Resources/Styles") NewFileName += ".xaml";
+            else if (NewFileFolder.Contains("Repositories") || NewFileFolder.Contains("Models") || NewFileFolder.Contains("ViewModels") || NewFileFolder.Contains("Services")) NewFileName += ".cs";
         }
 
         var fullPath = string.IsNullOrEmpty(NewFileFolder) ? NewFileName : $"{NewFileFolder}/{NewFileName}";

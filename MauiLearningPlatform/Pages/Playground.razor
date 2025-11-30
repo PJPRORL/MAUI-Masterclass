@@ -98,6 +98,7 @@
     .maui-label { margin: 5px; }
     .maui-entry { margin: 5px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
     .maui-button { margin: 5px; padding: 10px 20px; background-color: #512bd4; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .maui-image { max-width: 100%; object-fit: contain; margin: 5px; }
 </style>
 
 @code {
@@ -349,6 +350,101 @@
                     builder.CloseElement();
                 }
                 break;
+
+            case "Image":
+                builder.OpenElement(seq++, "img");
+                builder.AddAttribute(seq++, "class", "maui-image");
+                ApplyCommonAttributes(builder, node, ref seq);
+
+                var sourceAttr = node.Attribute("Source");
+                if (sourceAttr != null)
+                {
+                    string src = sourceAttr.Value;
+                    if (IsBinding(src))
+                    {
+                        src = ResolveBinding(src, viewModel);
+                    }
+                    
+                    // Resolve file path if it's not a URL
+                    if (!string.IsNullOrEmpty(src) && !src.StartsWith("http") && !src.StartsWith("data:"))
+                    {
+                        // 1. Try exact path match (e.g. "Resources/Images/myimage.png")
+                        var imageFile = ProjectState.Files.FirstOrDefault(f => f.Path == src);
+                        
+                        // 2. Try looking in Resources/Images if not found
+                        if (imageFile == null)
+                        {
+                            imageFile = ProjectState.Files.FirstOrDefault(f => f.Path == $"Resources/Images/{src}");
+                        }
+
+                        // 3. Try by filename only (fallback)
+                        if (imageFile == null)
+                        {
+                            imageFile = ProjectState.Files.FirstOrDefault(f => f.Name == src);
+                        }
+
+                        if (imageFile != null)
+                        {
+                            src = imageFile.Content;
+                        }
+                    }
+                    
+                    builder.AddAttribute(seq++, "src", src);
+                }
+                
+                var heightRequest = node.Attribute("HeightRequest");
+                if (heightRequest != null) builder.AddAttribute(seq++, "height", heightRequest.Value);
+                
+                var widthRequest = node.Attribute("WidthRequest");
+                if (widthRequest != null) builder.AddAttribute(seq++, "width", widthRequest.Value);
+
+                builder.CloseElement();
+                break;
+
+            case "Slider":
+                builder.OpenElement(seq++, "input");
+                builder.AddAttribute(seq++, "type", "range");
+                builder.AddAttribute(seq++, "class", "maui-slider");
+                ApplyCommonAttributes(builder, node, ref seq);
+                
+                var min = node.Attribute("Minimum")?.Value ?? "0";
+                var max = node.Attribute("Maximum")?.Value ?? "1";
+                builder.AddAttribute(seq++, "min", min);
+                builder.AddAttribute(seq++, "max", max);
+                builder.AddAttribute(seq++, "step", "0.01");
+
+                var valueAttr = node.Attribute("Value");
+                if (valueAttr != null && IsBinding(valueAttr.Value))
+                {
+                    var propName = GetBindingPath(valueAttr.Value);
+                    var val = viewModel.Get(propName)?.ToString();
+                    builder.AddAttribute(seq++, "value", val);
+                    builder.AddAttribute(seq++, "oninput", EventCallback.Factory.Create<ChangeEventArgs>(this, (e) => 
+                    {
+                        viewModel.Set(propName, double.Parse(e.Value.ToString()));
+                        StateHasChanged();
+                    }));
+                }
+                builder.CloseElement();
+                break;
+
+            case "BoxView":
+                builder.OpenElement(seq++, "div");
+                builder.AddAttribute(seq++, "class", "maui-boxview");
+                ApplyCommonAttributes(builder, node, ref seq);
+                
+                var colorAttr = node.Attribute("Color");
+                if (colorAttr != null)
+                {
+                    var color = colorAttr.Value;
+                    if (IsBinding(color))
+                    {
+                        color = ResolveBinding(color, viewModel);
+                    }
+                    builder.AddAttribute(seq++, "style", $"background-color: {color}; width: 100px; height: 100px;");
+                }
+                builder.CloseElement();
+                break;
         }
     }
 
@@ -368,6 +464,14 @@
         var textColor = node.Attribute("TextColor")?.Value;
         if (textColor != null) style.Append($"color: {textColor};");
         
+        var horizontalOptions = node.Attribute("HorizontalOptions")?.Value;
+        if (horizontalOptions != null)
+        {
+            if (horizontalOptions.Contains("Center")) style.Append("align-self: center;");
+            else if (horizontalOptions.Contains("End")) style.Append("align-self: flex-end;");
+            else if (horizontalOptions.Contains("Start")) style.Append("align-self: flex-start;");
+        }
+
         if (style.Length > 0)
         {
             builder.AddAttribute(seq++, "style", style.ToString());
